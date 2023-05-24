@@ -1,1 +1,1 @@
-# sistema de vendas
+# sistema-de-vendas
