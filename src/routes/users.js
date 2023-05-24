@@ -12,10 +12,6 @@ import {
 
 const router = express.Router();
 
-router.get("/test", verifyJWT, (req, res) => {
-  res.json([{ message: "sucess" }]);
-});
-
 router.get("/:id", verifyJWT, getUserById);
 
 router.get("/", getUsers);
@@ -23,8 +19,6 @@ router.get("/", getUsers);
 router.post("/", addUser);
 
 router.post("/login", loginUser);
-
-const blacklist = [];
 
 router.post("/logout", logoutUser);
 

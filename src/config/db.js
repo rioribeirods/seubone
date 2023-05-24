@@ -9,11 +9,11 @@ export const db = mysql.createConnection({
 db.connect(function (err) {
   if (err) throw err;
   console.log("Connected!");
-  db.query("CREATE DATABASE IF NOT EXISTS seubone", function (err, result) {
+  db.query("CREATE DATABASE IF NOT EXISTS sistema_de_vendas", function (err, result) {
     if (err) throw err;
     console.log("Database created");
   });
-  const con_database = "USE seubone";
+  const con_database = "USE sistema_de_vendas";
   db.query(con_database, function (err, result) {
     if (err) throw err;
     console.log("Usando database!");

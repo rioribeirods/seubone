@@ -4,14 +4,15 @@ import auth_login from "../config/auth.js";
 
 const blacklist = [];
 
-export function logoutUser (req, res) {
+export function logoutUser(req, res) {
   blacklist.push(req.headers["x-access-token"]);
+  res.status(200).send([{ message: "logout" }]);
   res.end();
 }
 
 export function verifyJWT(req, res, next) {
   const token = req.headers["x-access-token"];
-  const index = blacklist.findIndex(item => item === token);
+  const index = blacklist.findIndex((item) => item === token);
   if (index !== -1) return res.status(401).end();
   jwt.verify(token, auth_login.secret, (err, decoded) => {
     if (err) return res.status(401).end();
@@ -21,32 +22,20 @@ export function verifyJWT(req, res, next) {
   });
 }
 
-export const test = (req, res) => {
-  return res.status(200).send([{ message: "login inválido!" }]);
-};
-
 export const getUsers = (_, res) => {
   const q = "SELECT * FROM usuarios";
 
   db.query(q, (err, data) => {
     if (err) return res.json(err);
-
-    return res.status(200).json(data);
+    if (data.length != 0) {
+      return res.status(200).json(data);
+    } else {
+      return res.status(404).send({ message: "Usuários não encontrados" });
+    }
   });
 };
 
 export const loginUser = (req, res) => {
-  // var q = "SELECT * FROM usuarios WHERE `login` = ? AND `senha` LIKE ?";
-
-  // const values = [req.body.login, req.body.senha];
-  // db.query(q, [...values], function (err, results) {
-  //   if (results.length > 0) {
-  //     res.send({ message: "login com sucesso!" });
-  //     res.render("views/home", { message: results });
-  //   } else {
-  //     return res.status(403).send({ message: "login inválido!" });
-  //   }
-  // });
   var q = "SELECT * FROM usuarios WHERE `login` = ? AND `senha` LIKE ?";
 
   const values = [req.body.login, req.body.senha];
@@ -65,9 +54,11 @@ export const loginUser = (req, res) => {
 export const deleteUser = (req, res) => {
   const q = "DELETE FROM usuarios WHERE `id` = ?";
 
-  db.query(q, [req.params.id], (err) => {
+  db.query(q, [req.params.id], (err, result) => {
     if (err) return res.json(err);
-
+    if (result.affectedRows == 0) {
+      return res.status(404).send({ message: "Usuário não encontrado!" });
+    }
     return res.status(200).json("Usuário deletado com sucesso.");
   });
 };
