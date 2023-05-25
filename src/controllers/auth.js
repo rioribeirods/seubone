@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import auth_login from "../config/auth.js";
+import { db } from "../config/db.js";
 
 const blacklist = [];
 
