@@ -11,8 +11,11 @@ import {
   verifyJWT, 
   logoutUser 
 } from "../controllers/auth.js";
+import { populateUsers } from "../config/populate.js";
 
 const router = express.Router();
+
+router.get("/users/populate", populateUsers);
 
 router.get("/users/:id", verifyJWT, getUserById);
 
