@@ -1,6 +1,4 @@
 import { db } from "../config/db.js";
-import jwt from "jsonwebtoken";
-import auth_login from "../config/auth.js";
 
 export const getVendas = (_, res) => {
   const q = "SELECT * FROM vendas";
@@ -31,7 +29,7 @@ export const getVendaById = (req, res) => {
 
 export const addVenda = (req, res) => {
     const q =
-    "INSERT INTO usuarios (`nome_empresa`, `nome_cliente`, `cnpj`, `telefone`, `valor_total`, `valor_frete`, `nome_produto`, `quantidade`, `compensada`, `usuarios_id`) VALUES(?)";
+    "INSERT INTO vendas (`nome_empresa`, `nome_cliente`, `cnpj`, `telefone`, `valor_total`, `valor_frete`, `nome_produto`, `quantidade`, `compensada`, `usuarios_id`) VALUES(?)";
 
     "CREATE TABLE IF NOT EXISTS vendas (id INT AUTO_INCREMENT PRIMARY KEY, nome_empresa VARCHAR(45), nome_cliente VARCHAR(45), cnpj VARCHAR(45), telefone VARCHAR(45), valor_total FLOAT, valor_frete FLOAT, nome_produto VARCHAR(45), quantidade INT, compensada INT, usuarios_id INT, FOREIGN KEY (usuarios_id) REFERENCES usuarios(id))"
     
@@ -50,7 +48,7 @@ export const addVenda = (req, res) => {
     
   db.query(q, [values], (err) => {
       if (err) return res.json(err);
-      return res.status(200).json(values);
+      return res.status(200).send([ { message: "Venda cadastrada com sucesso!"}]);
     });
 };
 
